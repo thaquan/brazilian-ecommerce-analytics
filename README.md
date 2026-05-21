@@ -19,6 +19,7 @@
 - [Phase 3: Star Schema Modeling](#-phase-3-star-schema-modeling)
 - [Phase 4: Power BI Dashboard](#-phase-4-power-bi-dashboard)
 - [Key Business Insights](#-key-business-insights)
+- [Documentation](#-documentation)
 - [Tech Stack](#-tech-stack)
 - [How to Reproduce](#-how-to-reproduce)
 - [Project Structure](#-project-structure)
@@ -218,6 +219,16 @@ Dim_Customers ───── FACT_ORDER_ITEMS ───── Dim_Products
 
 ---
 
+## 📄 Documentation
+
+For in-depth analysis and technical guides, please refer to the documents in the [docs/](docs/) directory:
+
+- 🐍 [Python Data Pipeline](docs/01_python_data_pipeline.md): Comprehensive guide on the 4 Python cleaning and modeling scripts, highlighting the datetime conversions, outlier tagging strategies, and date dimension creation.
+- 🔍 [SQL Business Analytics](docs/02_sql_business_analytics.md): Detailed walkthrough of the CTEs, Window Functions, and NTILE segmentation queries used to profile customers, logistics, and product pareto rankings.
+- 📊 [Business Insights & Solutions (Vietnamese)](docs/03_business_insights_and_solutions.md): Executive summary detailing business root-cause analysis, tactical and strategic marketing actions per RFM segment, logistics mitigation tactics, and prioritization matrices.
+
+---
+
 ## Tech Stack
 
 | Layer           | Technology          | Purpose                              |
@@ -288,12 +299,17 @@ Brazilian E-Commerce/
 │ ├── final_dashboard.pbix # Power BI Dashboard (4 pages)
 │ └── final_dashboard.pdf # PDF export for quick preview
 │
-├── images/ # Dashboard screenshots & assets
-│ ├── overview_dashboard.png # Page 1: Executive Overview
-│ ├── products_dashboard.png # Page 2: Product Analytics
-│ ├── logistics_dashboard.png # Page 3: Logistics Performance
-│ ├── customers_dashboard.png # Page 4: Customer Insights
-│ └── home_icon.png # Navigation icon
+├── images/                           # Dashboard screenshots & assets
+│   ├── overview_dashboard.png        # Page 1: Executive Overview
+│   ├── products_dashboard.png        # Page 2: Product Analytics
+│   ├── logistics_dashboard.png       # Page 3: Logistics Performance
+│   ├── customers_dashboard.png       # Page 4: Customer Insights
+│   └── home_icon.png                 # Navigation icon
+│
+├── docs/                             # Detailed project documentation
+│   ├── 01_python_data_pipeline.md    # Python scripts walkthrough (Vietnamese)
+│   ├── 02_sql_business_analytics.md  # SQL queries explanation (Vietnamese)
+│   └── 03_business_insights_and_solutions.md  # Business analysis & solutions (Vietnamese)
 │
 └── README.md
 
