@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+
+# Data files (too large for GitHub)
+data/raw/*.csv
+data/cleaned/*.csv
+data/star_schema/*.csv
+
+# Power BI temp files
+*.pbix.tmp
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
