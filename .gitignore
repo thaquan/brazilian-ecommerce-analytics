@@ -20,3 +20,6 @@ desktop.ini
 # IDE
 .vscode/
 .idea/
+
+# Local-only Documentation
+docs/
