@@ -1,0 +1,229 @@
+table _KeyMeasures
+	lineageTag: d8b355ff-e036-49c5-b387-819de0d0b60e
+
+	measure 'Total Revenue' = SUM(Fact_Order_Items[line_total])
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Commercial
+		lineageTag: 48b2ec69-2cc2-4ee0-a0dc-8d1ab0452350
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Product Revenue' = SUM(Fact_Order_Items[price])
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Commercial
+		lineageTag: 3f82d650-90d1-4379-a603-1ab273e44513
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Freight' = SUM(Fact_Order_Items[freight_value])
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Commercial
+		lineageTag: 5880bcd7-017b-411f-9553-0de8c6c18ea6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Orders' = ```
+
+			    DISTINCTCOUNT(Fact_Order_Items[order_id])
+			```
+		formatString: 0
+		lineageTag: b0029ee3-8326-47bc-99d7-90f34ddd775d
+
+	measure 'Total Customers' = DISTINCTCOUNT(Fact_Order_Items[customer_unique_id])
+		formatString: #,0
+		displayFolder: Customer
+		lineageTag: f294992d-9b32-4420-b66f-4377ce580c78
+
+	measure 'Average Order Value' = DIVIDE([Total Revenue], [Total Orders], 0)
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Commercial
+		lineageTag: dd6a95bb-da4e-43e7-951a-3566be17289c
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	measure 'Avg Review Score' = ```
+
+			    AVERAGE(Fact_Order_Items[review_score])
+			```
+		formatString: 0.00
+		lineageTag: 462be786-bc6e-4d7f-9f1e-a5b83d7a03dc
+
+	measure '% Positive Reviews' = ```
+
+			    DIVIDE(
+			        CALCULATE(
+			            COUNTROWS(Fact_Order_Items),
+			            Fact_Order_Items[review_score] >= 4
+			        ),
+			        COUNTROWS(Fact_Order_Items),
+			        0
+			    )
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: e8f1d968-eed4-4e33-9c0c-ca8ae6ae49fd
+
+	measure 'Avg Delivery Days' = ```
+
+			    AVERAGE(Fact_Order_Items[delivery_days])
+			```
+		lineageTag: cf00dfa5-8905-4459-8c93-07f323a8f0b5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Late Delivery Rate' = ```
+
+			    DIVIDE(
+			        CALCULATE(
+			            COUNTROWS(Fact_Order_Items),
+			            Fact_Order_Items[is_late_delivery] = 1
+			        ),
+			        CALCULATE(
+			            COUNTROWS(Fact_Order_Items),
+			            NOT ISBLANK(Fact_Order_Items[delivery_delay_days])
+			        ),
+			        0
+			    )
+			```
+		formatString: 0.0%;-0.0%;0.0%
+		lineageTag: 7355c853-a4ed-47b3-bc76-f47572769201
+
+	measure 'Avg Delay Days' = ```
+
+			    AVERAGE(Fact_Order_Items[delivery_delay_days])
+			```
+		lineageTag: 59e5d2a8-0983-49cd-ac25-d35e602044fe
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue YTD' = CALCULATE([Total Revenue], DATESYTD(Dim_Date[date]))
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Time Intelligence
+		lineageTag: b4eabc5c-61c4-44f5-8a1a-b21a60bfa9bf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue Previous Month' = CALCULATE([Total Revenue], DATEADD(Dim_Date[date], -1, MONTH))
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Time Intelligence
+		lineageTag: 0f82e69b-4008-441a-a95a-be645b1cadb6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	/// Revenue growth for the latest month with at least 100 orders versus its prior month.
+	measure 'Revenue MoM Growth %' =
+			VAR LastCompleteMonth =
+			    MAXX(
+			        FILTER(
+			            ALLSELECTED(Dim_Date[year_month]),
+			            CALCULATE([Total Orders]) >= 100
+			        ),
+			        Dim_Date[year_month]
+			    )
+			VAR CurrentMonthStart =
+			    DATE(VALUE(LEFT(LastCompleteMonth, 4)), VALUE(RIGHT(LastCompleteMonth, 2)), 1)
+			VAR CurrentMonthEnd = EOMONTH(CurrentMonthStart, 0)
+			VAR PreviousMonthStart = EOMONTH(CurrentMonthStart, -2) + 1
+			VAR PreviousMonthEnd = EOMONTH(CurrentMonthStart, -1)
+			VAR CurrentMonthRevenue =
+			    CALCULATE([Total Revenue], REMOVEFILTERS(Dim_Date), DATESBETWEEN(Dim_Date[date], CurrentMonthStart, CurrentMonthEnd))
+			VAR PreviousMonthRevenue =
+			    CALCULATE([Total Revenue], REMOVEFILTERS(Dim_Date), DATESBETWEEN(Dim_Date[date], PreviousMonthStart, PreviousMonthEnd))
+			RETURN
+			    DIVIDE(CurrentMonthRevenue - PreviousMonthRevenue, PreviousMonthRevenue, 0)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Time Intelligence
+		lineageTag: 0449fedd-391e-497a-8ae7-49a66d64c7c8
+
+	measure 'Revenue Same Period Last Year' = CALCULATE([Total Revenue], SAMEPERIODLASTYEAR(Dim_Date[date]))
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Time Intelligence
+		lineageTag: 29567e6d-36f0-423b-8bff-acd7b04e06b6
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Revenue Delivered Only' = CALCULATE([Total Revenue], Fact_Order_Items[order_status] = "delivered")
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Commercial
+		lineageTag: bda9975d-b1b3-4eac-bae0-4f16998aff2e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Top N Products' = ```
+
+			VAR TopNValue = SELECTEDVALUE('Top N Parameter'[Top N Parameter], 10)
+			VAR CurrentRank =
+			    RANKX(
+			        ALLSELECTED(Dim_Products[category]),
+			        [Total Revenue]
+			    )
+			RETURN
+			IF(CurrentRank <= TopNValue, [Total Revenue])
+
+			```
+		lineageTag: 18de8637-fe6e-484f-bc79-18edaf2b952e
+
+	measure 'Repeat Rate' = DIVIDE([Repeat Customers], [Active Customers], 0)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Customer
+		lineageTag: ba438eef-55b5-464f-bfc0-fd5e31ff2c12
+
+	/// Distinct customers active in the current filter context.
+	measure 'Active Customers' = DISTINCTCOUNT(Fact_Order_Items[customer_unique_id])
+		formatString: #,0
+		displayFolder: Customer
+		lineageTag: 64bd79f7-dc3c-433c-b888-ac7d23791ee5
+
+	/// Customers with at least two orders in the current filter context.
+	measure 'Repeat Customers' = COUNTROWS(FILTER(VALUES(Fact_Order_Items[customer_unique_id]), CALCULATE(DISTINCTCOUNT(Fact_Order_Items[order_id])) >= 2))
+		formatString: #,0
+		displayFolder: Customer
+		lineageTag: 751a2d94-86c6-43a4-a78c-0b5ed4e2c5eb
+
+	measure 'Revenue per Customer' = DIVIDE([Total Revenue], [Active Customers], 0)
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Customer
+		lineageTag: 3cab7160-cec6-4e4a-9e2e-cec52e9b70b0
+
+	measure 'Category Revenue Share %' = DIVIDE([Total Revenue], CALCULATE([Total Revenue], ALLSELECTED(Dim_Products[category])), 0)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Product
+		lineageTag: 3a39b66f-b4e8-497e-85cd-edc57eabb841
+
+	measure 'Category Rank' = RANKX(ALLSELECTED(Dim_Products[category]), [Total Revenue], , DESC, Dense)
+		formatString: 0
+		displayFolder: Product
+		lineageTag: b87bb8c1-cb4e-46ee-889e-2479d63108d3
+
+	measure 'Cumulative Revenue %' = VAR CurrentRank = [Category Rank] VAR RankedCategories = TOPN(CurrentRank, ALLSELECTED(Dim_Products[category]), [Total Revenue], DESC) VAR CumulativeRevenue = CALCULATE([Total Revenue], RankedCategories) VAR SelectedRevenue = CALCULATE([Total Revenue], ALLSELECTED(Dim_Products[category])) RETURN DIVIDE(CumulativeRevenue, SelectedRevenue, 0)
+		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Product
+		lineageTag: d39daf99-d663-4a68-b66a-8922764f07a9
+
+	measure 'Selected Period Label' = "Analysis period: " & FORMAT(MIN(Dim_Date[date]), "MMM yyyy") & " – " & FORMAT(MAX(Dim_Date[date]), "MMM yyyy")
+		displayFolder: Navigation
+		lineageTag: 52dbd8da-b249-4272-ab35-adde560e6a76
+
+	measure 'Average Item Price' = AVERAGE(Fact_Order_Items[price])
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Product
+		lineageTag: dab59aa4-db45-4eec-b329-8e4a4af15c0c
+
+	measure 'Average Freight' = AVERAGE(Fact_Order_Items[freight_value])
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Product
+		lineageTag: de9e2667-9242-41ca-a52e-acc65c0d3a6b
+
+	column Placeholder
+		isHidden
+		lineageTag: 7d8b22ca-ff08-4f33-843e-f77997f0f036
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Placeholder]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition _KeyMeasures = calculated
+		mode: import
+		source = DATATABLE("Placeholder", STRING, {{"_"}})
+
+	annotation PBI_Id = 92336834da734dd3989bec46af2e80ad

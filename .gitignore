@@ -11,6 +11,8 @@ data/star_schema/*.csv
 
 # Power BI temp files
 *.pbix.tmp
+**/.pbi/
+powerbi_dashboard/tools/
 
 # OS files
 .DS_Store

@@ -170,7 +170,11 @@ Dim_Customers ───── FACT_ORDER_ITEMS ───── Dim_Products
 
 ## Phase 4: Power BI Dashboard
 
-**File:** [`final_dashboard.pbix`](powerbi_dashboard/final_dashboard.pbix) | 📄 [PDF Preview](powerbi_dashboard/final_dashboard.pdf)
+**Power BI Project:** [`final_dashboard_rework.pbip`](powerbi_dashboard/final_dashboard_rework.pbip) | [Implementation notes](powerbi_dashboard/REWORK_NOTES.md)
+
+The dashboard is stored in PBIP/PBIR source format so report pages, visuals,
+theme, and TMDL model definitions can be reviewed directly in GitHub. Refresh
+uses `localhost\\SQLEXPRESS` and the `OlistEcommerce` database.
 
 ### Dashboard Preview:
 
@@ -186,24 +190,23 @@ Dim_Customers ───── FACT_ORDER_ITEMS ───── Dim_Products
 
 | Page                      | Focus                         | Key Visuals                                                                                              |
 | ------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------- |
-| **Executive Overview**    | Revenue & Operations KPIs     | KPI Cards, Top 10 Categories Bar Chart, Monthly Trend (Line+Column), AOV by Day of Week                  |
-| **Product Analytics**     | Product performance deep-dive | Treemap (Revenue share), Top 15 Hero Products, Matrix with Heatmap, Scatter Plot (Price vs Freight)      |
-| **Logistics Performance** | Delivery operations           | Map (Delivery Days by State), Donut (On-time vs Late), Delivery Trend, Delay vs Review Score correlation |
-| **Customer Insights**     | Customer behavior & growth    | Monthly Active Customers, One-time vs Repeat breakdown, Traffic by Day of Week, Top 10 Cities            |
+| **Executive Overview** | Revenue & Operations KPIs | KPI callouts, revenue vs prior year, top categories, delivery mix, late-rate trend, operational matrix |
+| **Product Analytics**  | Product performance deep-dive | Pareto combo chart, price/freight scatter plot, category performance matrix |
+| **Logistics**          | Delivery operations | State ranking, delay-bucket volume vs review score, monthly late-delivery trend |
+| **Customer Insights**  | Customer behavior & growth | Active/repeat trend, weekday matrix, top cities, customer-type composition |
 
-### DAX Measures (15+):
+### DAX Measures (25+):
 
 - Revenue: `Total Revenue`, `Product Revenue`, `Total Freight`, `Average Order Value`
 - Operations: `Avg Delivery Days`, `Late Delivery Rate`, `Avg Delay Days`
 - Satisfaction: `Avg Review Score`, `% Positive Reviews`
 - Time Intelligence: `Revenue YTD`, `Revenue MoM Growth %`, `Revenue Previous Month`
-- Advanced: `Revenue Delivered Only`, `Repeat Rate`
+- Advanced: `Revenue Delivered Only`, `Active Customers`, `Repeat Customers`, `Repeat Rate`, `Revenue per Customer`, `Category Revenue Share %`, `Cumulative Revenue %`
 
 ### UI/UX Features:
 
 - Global Slicers (Date Range, Status, Category) synced across all pages
 - Page Navigation via menu buttons
-- Reset button (Bookmark-based filter reset)
 - Consistent color theme & card-based layout
 
 ---
@@ -259,7 +262,8 @@ python scripts_python/03_load_to_sqlserver.py
 python scripts_python/04_star_schema_builder.py
 
 # 5. Open Power BI Dashboard
-# Open powerbi_dashboard/final_dashboard.pbix in Power BI Desktop
+# Open powerbi_dashboard/final_dashboard_rework.pbip in Power BI Desktop
+# Select Refresh now if the local import cache is empty
 ```
 
 ---
@@ -286,8 +290,12 @@ Brazilian E-Commerce/
 │   └── 04_rfm_segmentation.sql           # RFM customer segmentation
 │
 ├── powerbi_dashboard/
-│   ├── final_dashboard.pbix          # Power BI Dashboard (4 pages)
-│   └── final_dashboard.pdf           # PDF export for quick preview
+│   ├── final_dashboard.pbix                  # Legacy PBIX baseline
+│   ├── final_dashboard.pdf                   # Legacy PDF preview
+│   ├── final_dashboard_rework.pbip           # Power BI project manifest
+│   ├── final_dashboard_rework.Report/        # PBIR report pages, visuals, and theme
+│   ├── final_dashboard_rework.SemanticModel/ # TMDL semantic model
+│   └── REWORK_NOTES.md                       # Open/refresh and implementation notes
 │
 ├── images/                           # Dashboard screenshots & assets
 │   ├── overview_dashboard.png        # Page 1: Executive Overview

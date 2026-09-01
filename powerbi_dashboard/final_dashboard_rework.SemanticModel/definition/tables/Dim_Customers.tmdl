@@ -1,0 +1,63 @@
+table Dim_Customers
+	lineageTag: 6c43ecb0-4aa1-4030-9ddd-209a9ee802be
+
+	column customer_unique_id
+		dataType: string
+		lineageTag: 75216869-4d2c-49dc-8d75-d46e0c0b936c
+		summarizeBy: none
+		sourceColumn: customer_unique_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_zip_code_prefix
+		dataType: int64
+		formatString: 0
+		lineageTag: 18237190-fd2c-40e0-ac0d-a1a0de66033d
+		summarizeBy: none
+		sourceColumn: customer_zip_code_prefix
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_city
+		dataType: string
+		lineageTag: e8f0fa2a-76e1-4a46-abbd-658bd2236ee8
+		summarizeBy: none
+		sourceColumn: customer_city
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_state
+		dataType: string
+		lineageTag: a5a42522-7c13-4c5f-af31-17b99394a5e0
+		summarizeBy: none
+		sourceColumn: customer_state
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer Type' = ```
+
+			VAR OrderCount = CALCULATE(DISTINCTCOUNT(Fact_Order_Items[order_id]))
+			RETURN IF(OrderCount > 1, "Repeat", "One-Time")
+
+			```
+		lineageTag: 3dc1f7f1-00fa-4bff-aca5-c589e37db49e
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Customer State Location' = Dim_Customers[customer_state] & ", Brazil"
+		dataType: string
+		lineageTag: 2792fc62-40c7-4e55-8a00-2539fea648ac
+		dataCategory: StateOrProvince
+		summarizeBy: none
+
+	partition Dim_Customers = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("localhost\SQLEXPRESS", "OlistEcommerce"),
+				    dbo_Dim_Customers = Source{[Schema="dbo",Item="Dim_Customers"]}[Data]
+				in
+				    dbo_Dim_Customers
+
+	annotation PBI_ResultType = Table

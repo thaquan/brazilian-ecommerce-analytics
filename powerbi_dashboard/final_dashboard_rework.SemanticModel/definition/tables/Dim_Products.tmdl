@@ -1,0 +1,79 @@
+table Dim_Products
+	lineageTag: bbf53a18-6f03-4b12-b3b7-d8fa8cbb3b6d
+
+	column product_id
+		dataType: string
+		lineageTag: d6d65f72-61c6-41f0-be60-3cffc738b17f
+		summarizeBy: none
+		sourceColumn: product_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column category
+		dataType: string
+		lineageTag: fe848083-77e7-4ad6-84e5-2e535199a962
+		summarizeBy: none
+		sourceColumn: category
+
+		annotation SummarizationSetBy = Automatic
+
+	column product_weight_g
+		dataType: double
+		lineageTag: 0c366a6e-0b84-43dc-b434-fb8ffa52ba50
+		summarizeBy: none
+		sourceColumn: product_weight_g
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_length_cm
+		dataType: double
+		lineageTag: bb1dc4d5-c0b9-4bda-b637-bf28bd74fb6b
+		summarizeBy: none
+		sourceColumn: product_length_cm
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_height_cm
+		dataType: double
+		lineageTag: e51bb4c3-531e-4d7c-bc70-bad2e56ee020
+		summarizeBy: none
+		sourceColumn: product_height_cm
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column product_width_cm
+		dataType: double
+		lineageTag: 9024de69-3b56-4db5-b558-9c1dde7fd702
+		summarizeBy: none
+		sourceColumn: product_width_cm
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column volume_cm3
+		dataType: double
+		lineageTag: cba7128d-6093-4298-b5f3-5f07e5b24fc4
+		summarizeBy: none
+		sourceColumn: volume_cm3
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition Dim_Products = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("localhost\SQLEXPRESS", "OlistEcommerce"),
+				    dbo_Dim_Products = Source{[Schema="dbo",Item="Dim_Products"]}[Data]
+				in
+				    dbo_Dim_Products
+
+	annotation PBI_ResultType = Table

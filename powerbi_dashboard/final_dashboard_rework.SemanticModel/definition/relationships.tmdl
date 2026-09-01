@@ -1,0 +1,30 @@
+relationship df5a941b-d46b-4e0f-b17e-2bd22595c628
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Fact_Order_Items.order_purchase_timestamp
+	toColumn: LocalDateTable_fed99392-ba17-4e98-961d-948449ecb70d.Date
+
+relationship c38f2429-7d21-4a31-b22b-cfbeab61a10e
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Fact_Order_Items.order_delivered_customer_date
+	toColumn: LocalDateTable_2aa221fa-26f4-4a48-9b51-1763d1dd0af4.Date
+
+relationship 92cde31f-9bf8-4be7-9967-87dc0e2b23a0
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Fact_Order_Items.order_estimated_delivery_date
+	toColumn: LocalDateTable_401fe1f6-29bb-4275-b5d2-99fca02978d5.Date
+
+relationship 00fc7d55-fdbe-0f6c-d40e-4d4718444aa2
+	fromColumn: Fact_Order_Items.order_date_key
+	toColumn: Dim_Date.date_key
+
+relationship 46eb6384-a682-abe8-bf2e-006979272107
+	fromColumn: Fact_Order_Items.customer_unique_id
+	toColumn: Dim_Customers.customer_unique_id
+
+relationship 368c0592-5fc6-d338-3ec8-b2ed48f4476f
+	fromColumn: Fact_Order_Items.product_id
+	toColumn: Dim_Products.product_id
+
+relationship d5189ce1-4ec2-095f-5b7f-467e2150a92a
+	fromColumn: Fact_Order_Items.seller_id
+	toColumn: Dim_Sellers.seller_id

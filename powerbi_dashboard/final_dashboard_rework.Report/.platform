@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Brazilian E-Commerce — Reworked"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9ab6201f-7c37-4a83-badc-df1916be7275"
+  }
+}

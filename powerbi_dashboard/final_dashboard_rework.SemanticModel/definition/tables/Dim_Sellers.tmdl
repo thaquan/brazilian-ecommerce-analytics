@@ -1,0 +1,46 @@
+table Dim_Sellers
+	lineageTag: f12dbc4c-6dab-4f15-be5c-29a7e0339fda
+
+	column seller_id
+		dataType: string
+		lineageTag: 22b81e23-7de1-4f9b-99e6-17170d251522
+		summarizeBy: none
+		sourceColumn: seller_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_zip_code_prefix
+		dataType: int64
+		formatString: 0
+		lineageTag: 6192b498-f7f3-4c92-8a0d-e404961041ea
+		summarizeBy: none
+		sourceColumn: seller_zip_code_prefix
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_city
+		dataType: string
+		lineageTag: 72481230-3fb0-4689-9d36-3fee2b3435e4
+		summarizeBy: none
+		sourceColumn: seller_city
+
+		annotation SummarizationSetBy = Automatic
+
+	column seller_state
+		dataType: string
+		lineageTag: dc3b513d-af6d-4916-a0a0-fdebeed795ee
+		summarizeBy: none
+		sourceColumn: seller_state
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Sellers = m
+		mode: import
+		source =
+				let
+				    Source = Sql.Database("localhost\SQLEXPRESS", "OlistEcommerce"),
+				    dbo_Dim_Sellers = Source{[Schema="dbo",Item="Dim_Sellers"]}[Data]
+				in
+				    dbo_Dim_Sellers
+
+	annotation PBI_ResultType = Table
