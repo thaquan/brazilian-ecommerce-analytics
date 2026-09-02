@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Fact_Order_Items"
+                      "Entity": "Fact_Orders"
                     }
                   },
                   "Property": "Delay Bucket"
                 }
               },
-              "queryRef": "Fact_Order_Items.Delay Bucket",
+              "queryRef": "Fact_Orders.Delay Bucket",
               "nativeQueryRef": "Delay Bucket",
               "active": true
             }

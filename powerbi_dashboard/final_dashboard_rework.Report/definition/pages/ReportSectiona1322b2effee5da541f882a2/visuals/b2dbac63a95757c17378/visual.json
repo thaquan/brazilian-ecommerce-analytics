@@ -51,11 +51,11 @@
                       "Entity": "_KeyMeasures"
                     }
                   },
-                  "Property": "Total Orders"
+                  "Property": "Product Orders"
                 }
               },
-              "queryRef": "_KeyMeasures.Total Orders",
-              "nativeQueryRef": "Total Orders"
+              "queryRef": "_KeyMeasures.Product Orders",
+			  "nativeQueryRef": "Product Orders"
             },
             {
               "field": {

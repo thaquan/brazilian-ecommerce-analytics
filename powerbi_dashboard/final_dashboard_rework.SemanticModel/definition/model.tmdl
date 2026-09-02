@@ -6,21 +6,18 @@ model Model
 		legacyRedirects
 		returnErrorValuesAsNull
 
-annotation __PBI_TimeIntelligenceEnabled = 1
+annotation __PBI_TimeIntelligenceEnabled = 0
 
-annotation PBI_QueryOrder = ["Dim_Date","Dim_Customers","Dim_Products","Dim_Sellers","Fact_Order_Items"]
+annotation PBI_QueryOrder = ["Dim_Date","Dim_Customers","Dim_Products","Dim_Sellers","Fact_Orders","Fact_Order_Items"]
 
 annotation PBI_ProTooling = ["MCP-PBIModeling","DevMode"]
 
 ref table Dim_Date
-ref table DateTableTemplate_2bf89b0b-1bea-483e-90dc-efeba55be3a4
 ref table Dim_Customers
 ref table Dim_Products
 ref table Dim_Sellers
+ref table Fact_Orders
 ref table Fact_Order_Items
-ref table LocalDateTable_fed99392-ba17-4e98-961d-948449ecb70d
-ref table LocalDateTable_2aa221fa-26f4-4a48-9b51-1763d1dd0af4
-ref table LocalDateTable_401fe1f6-29bb-4275-b5d2-99fca02978d5
 ref table _KeyMeasures
 ref table 'Top N Parameter'
 

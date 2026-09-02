@@ -3,6 +3,7 @@ table Fact_Order_Items
 
 	column order_id
 		dataType: string
+		isHidden
 		lineageTag: 1a02eb76-7a35-48c6-8045-325f17a6dad6
 		summarizeBy: none
 		sourceColumn: order_id
@@ -13,13 +14,14 @@ table Fact_Order_Items
 		dataType: int64
 		formatString: 0
 		lineageTag: 6a846fd1-5128-4849-8937-dc6ba7f53cc2
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: order_item_id
 
 		annotation SummarizationSetBy = Automatic
 
 	column order_date_key
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: d9dff2eb-1bc0-4e69-8cee-a178ce2a7442
 		summarizeBy: none
@@ -29,6 +31,7 @@ table Fact_Order_Items
 
 	column customer_unique_id
 		dataType: string
+		isHidden
 		lineageTag: 43643390-37a8-4e8a-b0f2-39af6c9408d6
 		summarizeBy: none
 		sourceColumn: customer_unique_id
@@ -53,6 +56,7 @@ table Fact_Order_Items
 
 	column order_status
 		dataType: string
+		isHidden
 		lineageTag: 3d1fc078-bb6d-4efc-8526-40409413244a
 		summarizeBy: none
 		sourceColumn: order_status
@@ -91,6 +95,7 @@ table Fact_Order_Items
 
 	column total_payment
 		dataType: double
+		isHidden
 		lineageTag: f58269a9-6908-48c7-a61e-542c17493771
 		summarizeBy: sum
 		sourceColumn: total_payment
@@ -101,6 +106,7 @@ table Fact_Order_Items
 
 	column payment_installments_max
 		dataType: double
+		isHidden
 		lineageTag: 4cf40aef-bf20-42e4-bc2c-5d5d8a280c24
 		summarizeBy: sum
 		sourceColumn: payment_installments_max
@@ -111,6 +117,7 @@ table Fact_Order_Items
 
 	column payment_type_primary
 		dataType: string
+		isHidden
 		lineageTag: efc86089-81d5-4a7a-a4f4-de4b6bacdb36
 		summarizeBy: none
 		sourceColumn: payment_type_primary
@@ -119,6 +126,7 @@ table Fact_Order_Items
 
 	column delivery_days
 		dataType: double
+		isHidden
 		lineageTag: e9b66365-094b-4d32-ae0b-efe36d82a307
 		summarizeBy: sum
 		sourceColumn: delivery_days
@@ -129,6 +137,7 @@ table Fact_Order_Items
 
 	column delivery_delay_days
 		dataType: double
+		isHidden
 		lineageTag: e6a8cc50-eb42-47cc-ace3-cf71eafbda06
 		summarizeBy: sum
 		sourceColumn: delivery_delay_days
@@ -139,6 +148,7 @@ table Fact_Order_Items
 
 	column is_late_delivery
 		dataType: int64
+		isHidden
 		formatString: 0
 		lineageTag: d1131b82-4d2a-4ff0-b783-5ccbc6a6cc6c
 		summarizeBy: sum
@@ -148,6 +158,7 @@ table Fact_Order_Items
 
 	column review_score
 		dataType: double
+		isHidden
 		lineageTag: 22d719bf-11a7-4eee-b1b5-0e3149988e2b
 		summarizeBy: sum
 		sourceColumn: review_score
@@ -158,47 +169,36 @@ table Fact_Order_Items
 
 	column order_purchase_timestamp
 		dataType: dateTime
+		isHidden
 		formatString: General Date
 		lineageTag: baec9241-e3eb-4fbc-9bd9-20a1631ee540
 		summarizeBy: none
 		sourceColumn: order_purchase_timestamp
 
-		variation Variation
-			isDefault
-			relationship: df5a941b-d46b-4e0f-b17e-2bd22595c628
-			defaultHierarchy: LocalDateTable_fed99392-ba17-4e98-961d-948449ecb70d.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 	column order_delivered_customer_date
 		dataType: dateTime
+		isHidden
 		formatString: General Date
 		lineageTag: a08d0edc-e445-4161-9908-4d9115f9cc58
 		summarizeBy: none
 		sourceColumn: order_delivered_customer_date
 
-		variation Variation
-			isDefault
-			relationship: c38f2429-7d21-4a31-b22b-cfbeab61a10e
-			defaultHierarchy: LocalDateTable_2aa221fa-26f4-4a48-9b51-1763d1dd0af4.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 	column order_estimated_delivery_date
 		dataType: dateTime
+		isHidden
 		formatString: General Date
 		lineageTag: 34d556c9-ddf5-4d6c-add9-a0f9db8b8359
 		summarizeBy: none
 		sourceColumn: order_estimated_delivery_date
 
-		variation Variation
-			isDefault
-			relationship: 92cde31f-9bf8-4be7-9967-87dc0e2b23a0
-			defaultHierarchy: LocalDateTable_401fe1f6-29bb-4275-b5d2-99fca02978d5.'Date Hierarchy'
-
 		annotation SummarizationSetBy = Automatic
 
 	column 'Delivery Status' = IF(Fact_Order_Items[is_late_delivery] == 1, "Late", "On Time")
+		isHidden
 		lineageTag: 573649d9-09b3-4565-b278-c9fb3785dc3b
 		summarizeBy: none
 
@@ -213,6 +213,7 @@ table Fact_Order_Items
 
 	column 'Delay Bucket' = VAR d = Fact_Order_Items[delivery_delay_days] RETURN SWITCH(TRUE(), ISBLANK(d), "Unknown", d <= 0, "On time", d <= 3, "1–3 days", d <= 7, "4–7 days", d <= 14, "8–14 days", "15+ days")
 		dataType: string
+		isHidden
 		lineageTag: 2507e8ef-4285-4749-9a5d-e35843aecb92
 		summarizeBy: none
 		sortByColumn: 'Delay Bucket Sort'

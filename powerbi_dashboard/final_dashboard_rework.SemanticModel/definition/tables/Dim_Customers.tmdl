@@ -36,7 +36,7 @@ table Dim_Customers
 
 	column 'Customer Type' = ```
 
-			VAR OrderCount = CALCULATE(DISTINCTCOUNT(Fact_Order_Items[order_id]))
+			VAR OrderCount = CALCULATE(COUNTROWS(Fact_Orders))
 			RETURN IF(OrderCount > 1, "Repeat", "One-Time")
 
 			```

@@ -23,16 +23,44 @@ table _KeyMeasures
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
 	measure 'Total Orders' = ```
-
-			    DISTINCTCOUNT(Fact_Order_Items[order_id])
+			    COUNTROWS(Fact_Orders)
 			```
 		formatString: 0
+		displayFolder: Commercial
 		lineageTag: b0029ee3-8326-47bc-99d7-90f34ddd775d
 
-	measure 'Total Customers' = DISTINCTCOUNT(Fact_Order_Items[customer_unique_id])
+	/// Distinct orders represented in the selected product/category context.
+	measure 'Product Orders' = DISTINCTCOUNT(Fact_Order_Items[order_id])
+		formatString: #,0
+		displayFolder: Product
+		lineageTag: 2758a81d-56b4-4e8a-a9b9-fe761958f669
+
+	measure 'Total Customers' = DISTINCTCOUNT(Fact_Orders[customer_unique_id])
 		formatString: #,0
 		displayFolder: Customer
 		lineageTag: f294992d-9b32-4420-b66f-4377ce580c78
+
+	/// Gross merchandise value from product price plus freight at order-item grain.
+	measure 'Total GMV' = [Total Revenue]
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Commercial
+		lineageTag: 79c86a72-3ccf-4dd0-add6-e1ee46a28568
+
+	/// Customer payment value at order grain, kept separate from merchandise GMV.
+	measure 'Total Payment Value' = SUM(Fact_Orders[total_payment])
+		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
+		displayFolder: Commercial
+		lineageTag: bd1a7a45-934f-4e76-bdd0-2c6faee08694
+
+	measure 'Delivered Orders' = CALCULATE([Total Orders], Fact_Orders[order_status] = "delivered")
+		formatString: #,0
+		displayFolder: Operations
+		lineageTag: 291419c6-c259-4f82-bed2-0a8bc8000d14
+
+	measure 'Reviewed Orders' = COUNT(Fact_Orders[review_score])
+		formatString: #,0
+		displayFolder: Customer
+		lineageTag: a384164c-029f-4a0f-a327-ac42ce018d47
 
 	measure 'Average Order Value' = DIVIDE([Total Revenue], [Total Orders], 0)
 		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
@@ -42,30 +70,33 @@ table _KeyMeasures
 		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
 
 	measure 'Avg Review Score' = ```
-
-			    AVERAGE(Fact_Order_Items[review_score])
+			    AVERAGE(Fact_Orders[review_score])
 			```
 		formatString: 0.00
+		displayFolder: Customer
 		lineageTag: 462be786-bc6e-4d7f-9f1e-a5b83d7a03dc
 
 	measure '% Positive Reviews' = ```
 
 			    DIVIDE(
 			        CALCULATE(
-			            COUNTROWS(Fact_Order_Items),
-			            Fact_Order_Items[review_score] >= 4
+			            COUNT(Fact_Orders[review_score]),
+			            Fact_Orders[review_score] >= 4
 			        ),
-			        COUNTROWS(Fact_Order_Items),
+			        [Reviewed Orders],
 			        0
 			    )
 			```
 		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Customer
 		lineageTag: e8f1d968-eed4-4e33-9c0c-ca8ae6ae49fd
 
 	measure 'Avg Delivery Days' = ```
 
-			    AVERAGE(Fact_Order_Items[delivery_days])
+			    AVERAGE(Fact_Orders[delivery_days])
 			```
+		formatString: 0.00
+		displayFolder: Operations
 		lineageTag: cf00dfa5-8905-4459-8c93-07f323a8f0b5
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
@@ -74,23 +105,23 @@ table _KeyMeasures
 
 			    DIVIDE(
 			        CALCULATE(
-			            COUNTROWS(Fact_Order_Items),
-			            Fact_Order_Items[is_late_delivery] = 1
+			            COUNTROWS(Fact_Orders),
+			            Fact_Orders[is_late_delivery] = 1
 			        ),
-			        CALCULATE(
-			            COUNTROWS(Fact_Order_Items),
-			            NOT ISBLANK(Fact_Order_Items[delivery_delay_days])
-			        ),
+			        COUNT(Fact_Orders[is_late_delivery]),
 			        0
 			    )
 			```
 		formatString: 0.0%;-0.0%;0.0%
+		displayFolder: Operations
 		lineageTag: 7355c853-a4ed-47b3-bc76-f47572769201
 
 	measure 'Avg Delay Days' = ```
 
-			    AVERAGE(Fact_Order_Items[delivery_delay_days])
+			    AVERAGE(Fact_Orders[delivery_delay_days])
 			```
+		formatString: 0.00
+		displayFolder: Operations
 		lineageTag: 59e5d2a8-0983-49cd-ac25-d35e602044fe
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
@@ -141,7 +172,7 @@ table _KeyMeasures
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
 
-	measure 'Revenue Delivered Only' = CALCULATE([Total Revenue], Fact_Order_Items[order_status] = "delivered")
+	measure 'Revenue Delivered Only' = CALCULATE([Total Revenue], Fact_Orders[order_status] = "delivered")
 		formatString: R$ #,0.00;(-R$ #,0.00);R$ 0.00
 		displayFolder: Commercial
 		lineageTag: bda9975d-b1b3-4eac-bae0-4f16998aff2e
@@ -168,13 +199,13 @@ table _KeyMeasures
 		lineageTag: ba438eef-55b5-464f-bfc0-fd5e31ff2c12
 
 	/// Distinct customers active in the current filter context.
-	measure 'Active Customers' = DISTINCTCOUNT(Fact_Order_Items[customer_unique_id])
+	measure 'Active Customers' = DISTINCTCOUNT(Fact_Orders[customer_unique_id])
 		formatString: #,0
 		displayFolder: Customer
 		lineageTag: 64bd79f7-dc3c-433c-b888-ac7d23791ee5
 
 	/// Customers with at least two orders in the current filter context.
-	measure 'Repeat Customers' = COUNTROWS(FILTER(VALUES(Fact_Order_Items[customer_unique_id]), CALCULATE(DISTINCTCOUNT(Fact_Order_Items[order_id])) >= 2))
+	measure 'Repeat Customers' = COUNTROWS(FILTER(VALUES(Fact_Orders[customer_unique_id]), CALCULATE(COUNTROWS(Fact_Orders)) >= 2))
 		formatString: #,0
 		displayFolder: Customer
 		lineageTag: 751a2d94-86c6-43a4-a78c-0b5ed4e2c5eb

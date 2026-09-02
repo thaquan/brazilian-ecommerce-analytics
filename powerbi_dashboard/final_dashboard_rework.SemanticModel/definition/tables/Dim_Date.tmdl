@@ -27,7 +27,7 @@ table Dim_Date
 		dataType: int64
 		formatString: 0
 		lineageTag: bdec2038-ca91-4383-b9fd-35b6ad433665
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: year
 
 		annotation SummarizationSetBy = Automatic
@@ -36,7 +36,7 @@ table Dim_Date
 		dataType: int64
 		formatString: 0
 		lineageTag: 7eeb147f-0492-48bc-97d2-c04e543ce23e
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: quarter
 
 		annotation SummarizationSetBy = Automatic
@@ -46,6 +46,7 @@ table Dim_Date
 		lineageTag: f4abfc71-7661-413e-97c1-a5e9ded303d1
 		summarizeBy: none
 		sourceColumn: quarter_name
+		sortByColumn: quarter
 
 		annotation SummarizationSetBy = Automatic
 
@@ -53,7 +54,7 @@ table Dim_Date
 		dataType: int64
 		formatString: 0
 		lineageTag: 99593c61-769e-41c7-9f1f-0d74dd4e6327
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: month
 
 		annotation SummarizationSetBy = Automatic
@@ -63,6 +64,7 @@ table Dim_Date
 		lineageTag: 8c07ec00-d8e5-4489-b635-c493fe343b69
 		summarizeBy: none
 		sourceColumn: month_name
+		sortByColumn: month
 
 		annotation SummarizationSetBy = Automatic
 
@@ -71,6 +73,7 @@ table Dim_Date
 		lineageTag: 76b5c311-40c1-4aeb-a1b2-6ed53b2c34f2
 		summarizeBy: none
 		sourceColumn: month_short
+		sortByColumn: month
 
 		annotation SummarizationSetBy = Automatic
 
@@ -86,7 +89,7 @@ table Dim_Date
 		dataType: int64
 		formatString: 0
 		lineageTag: 59c8bd20-69c1-4522-97c7-96f50743aa0f
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: week
 
 		annotation SummarizationSetBy = Automatic
@@ -95,7 +98,7 @@ table Dim_Date
 		dataType: int64
 		formatString: 0
 		lineageTag: de832e8f-5d03-44b4-b1e0-3c47cf54ff3c
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: day_of_week
 
 		annotation SummarizationSetBy = Automatic
@@ -115,7 +118,7 @@ table Dim_Date
 		dataType: int64
 		formatString: 0
 		lineageTag: 278456de-2bfb-4b02-b251-fc526ae28409
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: day_of_month
 
 		annotation SummarizationSetBy = Automatic
@@ -124,7 +127,7 @@ table Dim_Date
 		dataType: int64
 		formatString: 0
 		lineageTag: 6cb0cf30-63c1-4b92-bc4c-e6a57b0e6427
-		summarizeBy: sum
+		summarizeBy: none
 		sourceColumn: is_weekend
 
 		annotation SummarizationSetBy = Automatic

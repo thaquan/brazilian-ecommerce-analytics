@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "Fact_Order_Items"
+                      "Entity": "Fact_Orders"
                     }
                   },
                   "Property": "Delivery Status"
                 }
               },
-              "queryRef": "Fact_Order_Items.Delivery Status",
+              "queryRef": "Fact_Orders.Delivery Status",
               "nativeQueryRef": "Delivery Status",
               "active": true
             }
