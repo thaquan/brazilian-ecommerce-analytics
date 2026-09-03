@@ -182,9 +182,9 @@ uses `localhost\\SQLEXPRESS` and the `OlistEcommerce` database.
 | ---------------------------------------------------- | --------------------------------------------------- |
 | ![Executive Overview](images/overview_dashboard.png) | ![Product Analytics](images/products_dashboard.png) |
 
-| Logistics Performance                                    | Customer Insights                                    |
-| -------------------------------------------------------- | ---------------------------------------------------- |
-| ![Logistics Performance](images/logistics_dashboard.png) | ![Customer Insights](images/customers_dashboard.png) |
+| Delivery Analytics                                   | Customer Analytics                                   |
+| ---------------------------------------------------- | ---------------------------------------------------- |
+| ![Delivery Analytics](images/logistics_dashboard.png) | ![Customer Analytics](images/customers_dashboard.png) |
 
 ### Dashboard Pages:
 
@@ -192,10 +192,10 @@ uses `localhost\\SQLEXPRESS` and the `OlistEcommerce` database.
 | ------------------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------- |
 | **Executive Overview** | Revenue & Operations KPIs | KPI callouts, revenue vs prior year, top categories, delivery mix, late-rate trend, operational matrix |
 | **Product Analytics**  | Product performance deep-dive | Pareto combo chart, price/freight scatter plot, category performance matrix |
-| **Logistics**          | Delivery operations | State ranking, delay-bucket volume vs review score, monthly late-delivery trend |
-| **Customer Insights**  | Customer behavior & growth | Active/repeat trend, weekday matrix, top cities, customer-type composition |
+| **Delivery Analytics** | Delivery operations | Top-15 state ranking, delay-bucket volume vs review score, monthly late-delivery trend |
+| **Customer Analytics** | Customer behavior & growth | Active/repeat trend, weekday matrix, top-6 cities, customer-type composition |
 
-### DAX Measures (25+):
+### DAX Measures (30+):
 
 - Revenue: `Total Revenue`, `Product Revenue`, `Total Freight`, `Average Order Value`
 - Operations: `Avg Delivery Days`, `Late Delivery Rate`, `Avg Delay Days`
@@ -205,9 +205,10 @@ uses `localhost\\SQLEXPRESS` and the `OlistEcommerce` database.
 
 ### UI/UX Features:
 
-- Global Slicers (Date Range, Status, Category) synced across all pages
-- Page Navigation via menu buttons
-- Consistent color theme & card-based layout
+- Global slicers (period, category, order status) synced across all pages
+- Page navigation with a clear selected-page state
+- Purposeful Top-N views (Top 6 categories/cities, Top 15 states, Top 20 Pareto)
+- Consistent color theme, card-based layout, and compact technical-axis labels
 
 ---
 
@@ -300,8 +301,8 @@ Brazilian E-Commerce/
 ├── images/                           # Dashboard screenshots & assets
 │   ├── overview_dashboard.png        # Page 1: Executive Overview
 │   ├── products_dashboard.png        # Page 2: Product Analytics
-│   ├── logistics_dashboard.png       # Page 3: Logistics Performance
-│   ├── customers_dashboard.png       # Page 4: Customer Insights
+│   ├── logistics_dashboard.png       # Page 3: Delivery Analytics
+│   ├── customers_dashboard.png       # Page 4: Customer Analytics
 │   └── home_icon.png                 # Navigation icon
 │
 └── README.md

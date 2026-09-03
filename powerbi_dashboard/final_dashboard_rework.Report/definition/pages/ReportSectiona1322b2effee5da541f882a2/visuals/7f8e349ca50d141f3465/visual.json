@@ -60,7 +60,7 @@
                 }
               },
               "queryRef": "_KeyMeasures.Product Orders",
-			  "nativeQueryRef": "Product Orders"
+              "nativeQueryRef": "Product Orders"
             },
             {
               "field": {

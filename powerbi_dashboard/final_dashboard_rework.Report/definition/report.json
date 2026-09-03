@@ -46,6 +46,17 @@
           "type": "CustomTheme"
         }
       ]
+    },
+    {
+      "name": "SharedResources",
+      "type": "SharedResources",
+      "items": [
+        {
+          "name": "CY26SU04",
+          "path": "BaseThemes/CY26SU04.json",
+          "type": "BaseTheme"
+        }
+      ]
     }
   ],
   "settings": {
